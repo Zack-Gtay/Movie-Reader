@@ -1,9 +1,6 @@
 "use strict";
 // let project = 5
 // let drive: string = 'Fast'
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 // let now = new Date()
 // let colors = ['Red', 'Blue', 'Yellow']
@@ -89,26 +86,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // // let employee = <Employee> {} OR 
 // let employee = {} as Employee
 // employee.name = 'Paul';
-const fs_1 = __importDefault(require("fs"));
-let films = fs_1.default
-    .readFileSync('films.csv', { encoding: 'utf8' })
-    .split('\n')
-    .map((row) => {
-    return row.split(',');
-})
-    .map((col) => {
-    return [col[0], parseInt(col[1]), col[2], parseDate(col[3]), col[4]];
-});
-let count = 0;
-let actor = 'Bruce Willis';
-for (let film of films) {
-    console.log(film);
-    if (film[4] == 'Nicolas Cage') {
-        count++;
-    }
-}
-console.log(`${actor} appeared in ${count} films`);
-function parseDate(dateString) {
-    let date = dateString.split('/').map((d) => parseInt(d));
-    return new Date(date[2], date[1] - 1, date[0]);
-}
+const ConsoleReport_1 = require("./ConsoleReport");
+const filmCountAnalysis_1 = require("./filmCountAnalysis");
+const filmReader_1 = require("./filmReader");
+const HtmlReport_1 = require("./HtmlReport");
+const reader = new filmReader_1.filmReader('films.csv');
+const analyzer = new filmCountAnalysis_1.FilmCountAnalysis(reader.data);
+const consoleReport = new ConsoleReport_1.ConsoleReport(analyzer.run('Geena Davis'));
+const htmlReport = new HtmlReport_1.HtmlReport(analyzer.run('Geena Davis'));
+consoleReport.print();
+htmlReport.print();

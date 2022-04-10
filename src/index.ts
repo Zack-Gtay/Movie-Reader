@@ -120,31 +120,19 @@
 // let employee = {} as Employee
 // employee.name = 'Paul';
 
-import fs from 'fs'
 
-let films = fs
-.readFileSync('films.csv', {encoding: 'utf8'})
-.split('\n')
-.map((row:string): string[] =>{
-  return row.split(',')
-})
-.map((col) =>{
-  return [col[0], parseInt(col[1]), col[2], parseDate(col[3]), col[4]]
-})
+import { ConsoleReport } from './ConsoleReport';
+import { FilmCountAnalysis } from './filmCountAnalysis';
+import {filmReader} from './filmReader';
+import { HtmlReport } from './HtmlReport';
 
-let count: number = 0;
-let actor: string = 'Bruce Willis';
-for(let film of films){
-  console.log(film);
-  
-  if(film[4] == 'Nicolas Cage'){
-    count++
-  }
-  
-}
-console.log(`${actor} appeared in ${count} films`);
+const reader = new filmReader('films.csv')
+const analyzer = new FilmCountAnalysis(reader.data)
+const consoleReport = new ConsoleReport(analyzer.run('Geena Davis'))
+const htmlReport = new HtmlReport(analyzer.run('Geena Davis')) 
 
-function parseDate(dateString: string): Date{
-  let date = dateString.split('/').map((d) => parseInt(d))
-  return new Date(date[2], date[1]-1, date[0])
-}
+
+consoleReport.print()
+htmlReport.print()
+
+
